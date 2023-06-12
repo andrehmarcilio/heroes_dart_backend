@@ -3,15 +3,14 @@ import 'dart:io';
 
 import 'package:dart_frog/dart_frog.dart';
 
-import '../../mock/heroes_mock.dart';
-import '../../mock/session_mock.dart';
+import '../../../mock/session_mock.dart';
 
 FutureOr<Response> onRequest(RequestContext context) async {
   switch (context.request.method) {
     case HttpMethod.get:
-      return _get(context);
     case HttpMethod.post:
     case HttpMethod.delete:
+      return _delete(context);
     case HttpMethod.head:
     case HttpMethod.options:
     case HttpMethod.patch:
@@ -20,10 +19,10 @@ FutureOr<Response> onRequest(RequestContext context) async {
   }
 }
 
-Future<Response> _get(RequestContext context) async {
-  final header = context.request.headers;
-
+Future<Response> _delete(RequestContext context) async {
   try {
+    final header = context.request.headers;
+
     final userEmail = header['USER_EMAIL'] ?? '';
     final token = header['USER_TOKEN'] ?? '';
 
@@ -32,17 +31,18 @@ Future<Response> _get(RequestContext context) async {
     });
 
     if (userSession.isNotEmpty) {
-      return Response.json(body: heroesMock);
+      activeTokens.remove(userSession.first);
+      return Response.json();
     }
 
     return Response.json(
-      statusCode: 401,
-      body: {'error': 'Nenhuma sessão encontrada, por favor, faça o login ;)'},
+      statusCode: 422,
+      body: {'error': 'Usuário não encontrado'},
     );
   } on Exception {
     return Response.json(
       statusCode: 401,
-      body: {'error': 'Nenhuma sessão encontrada, por favor, faça o login ;)'},
+      body: {'error': 'Preencha os campos corretamente'},
     );
   }
 }
