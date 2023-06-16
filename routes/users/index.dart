@@ -21,6 +21,7 @@ FutureOr<Response> onRequest(RequestContext context) async {
 }
 
 Future<Response> _post(RequestContext context) async {
+  await Future<void>.delayed(const Duration(seconds: 1));
   try {
     final body = (await context.request.json()) as Map;
 

@@ -20,6 +20,7 @@ FutureOr<Response> onRequest(RequestContext context) async {
 }
 
 Future<Response> _delete(RequestContext context) async {
+  await Future<void>.delayed(const Duration(seconds: 1));
   try {
     final header = context.request.headers;
 

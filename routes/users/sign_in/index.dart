@@ -22,6 +22,7 @@ FutureOr<Response> onRequest(RequestContext context) async {
 
 Future<Response> _post(RequestContext context) async {
   try {
+    await Future<void>.delayed(const Duration(seconds: 1));
     final body = (await context.request.json()) as Map;
 
     final userEmail = (body['email'] ?? '') as String;

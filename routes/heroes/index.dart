@@ -21,6 +21,7 @@ FutureOr<Response> onRequest(RequestContext context) async {
 }
 
 Future<Response> _get(RequestContext context) async {
+  await Future<void>.delayed(const Duration(seconds: 1));
   final header = context.request.headers;
 
   try {
